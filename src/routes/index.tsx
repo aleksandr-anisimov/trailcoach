@@ -1,53 +1,43 @@
-import { createBrowserRouter } from "react-router-dom";
-import Layout from "@/components/layout";
-import HomePage from "@/features/dashboard/home";
-import LoginPage from "@/features/auth/login/index";
-import RegisterPage from "@/features/auth/register/RegisterPage";
-import DashboardPage from "@/pages/dashboard";
-import NotFound from "@/pages/not-found";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { createBrowserRouter } from "react-router-dom"
+import Layout from "@/components/layout" // твой общий лэйаут (если используешь)
+import HomePage from "@/features/dashboard/home" // твоя главная (вне дашборда)
+import LoginPage from "@/features/auth/login"
+import NotFound from "@/pages/not-found"
+
+import ProtectedRoute from "@/components/auth/ProtectedRoute" // твой guard (Outlet внутри)
+import DashboardLayout from "@/features/dashboard/home"
+import DashboardHome from "@/features/dashboard/pages/Home"
+import Workouts from "@/features/dashboard/pages/Workouts"
+import Stats from "@/features/dashboard/pages/Stats"
+import Settings from "@/features/dashboard/pages/Settings"
 
 export const router = createBrowserRouter([
   {
+    element: <Layout><HomePage /></Layout>,
     path: "/",
-    element: (
-      <Layout>
-        <HomePage />
-      </Layout>
-    ),
   },
   {
+    element: <Layout><LoginPage /></Layout>,
     path: "/login",
-    element: (
-      <Layout>
-        <LoginPage />
-      </Layout>
-    ),
   },
+  // приватная группа
   {
-    path: "/register",
-    element: (
-      <Layout>
-        <RegisterPage />
-      </Layout>
-    ),
-  },
-  {
-    path: "/dashboard",
-    element: (
-      <ProtectedRoute>
-        <Layout>
-          <DashboardPage />
-        </Layout>
-      </ProtectedRoute>
-    ),
+    element: <ProtectedRoute />, // проверка авторизации → Outlet
+    children: [
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />, // шапка + меню
+        children: [
+          { index: true, element: <DashboardHome /> },
+          { path: "workouts", element: <Workouts /> },
+          { path: "stats", element: <Stats /> },
+          { path: "settings", element: <Settings /> },
+        ],
+      },
+    ],
   },
   {
     path: "*",
-    element: (
-      <Layout>
-        <NotFound />
-      </Layout>
-    ),
+    element: <Layout><NotFound /></Layout>,
   },
-]);
+])
