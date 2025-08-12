@@ -1,5 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom"
 import { useAuthStore } from "@/store/auth"
+import Sidebar from "@/components/dashboard/Sidebar"
+
+
 
 function SidebarLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
@@ -24,6 +27,7 @@ export default function DashboardLayout() {
       {/* SIDEBAR */}
       <aside className="border-r p-4 space-y-4">
         <div className="font-bold text-xl">TrailCoach</div>
+        <Sidebar />
         <nav className="space-y-1">
           <SidebarLink to="/dashboard">Обзор</SidebarLink>
           <SidebarLink to="/dashboard/workouts">Тренировки</SidebarLink>
